@@ -176,6 +176,8 @@ class FeedPublishingController
         switch ($feedConfig->name) {
             case 'MSN':
                 return $this->simulatePublishToMsn($article, $feedConfig);
+            case 'MSN1':
+                return $this->simulatePublishToMsn($article, $feedConfig);
             case 'GoogleNews':
                 return $this->simulatePublishToGoogleNews($article, $feedConfig);
             case 'AppleNews':

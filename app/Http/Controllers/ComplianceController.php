@@ -22,10 +22,10 @@ class ComplianceController extends Controller
     public function checkCompliance(Article $article, Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'feed_name' => 'required|string|exists:feed_configs,name',
+            'feed_id' => 'required|integer|exists:feed_configs,id',
         ]);
 
-        $feedConfig = FeedConfig::where('name', $validated['feed_name'])->first();
+        $feedConfig = FeedConfig::where('id', $validated['feed_id'])->first();
         $results = $this->complianceEngine->validateArticle($article, $feedConfig);
 
         $passedCount = collect($results)->filter(fn($r) => $r['passed'])->count();
@@ -33,7 +33,7 @@ class ComplianceController extends Controller
 
         return response()->json([
             'article_id' => $article->id,
-            'feed_name' => $validated['feed_name'],
+            'feed_name' => $feedConfig->name,
             'overall_status' => $passedCount === $totalCount ? 'PASSED' : 'FAILED',
             'passed_checks' => $passedCount,
             'total_checks' => $totalCount,

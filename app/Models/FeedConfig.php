@@ -11,6 +11,9 @@ class FeedConfig extends Model
 {
     use HasFactory;
 
+    protected $appends = ['guidelines'];
+
+
     protected $fillable = [
         'name',
         'display_name',
@@ -40,4 +43,9 @@ class FeedConfig extends Model
             ->orderBy('priority')
             ->get();
     }
+
+    public function getGuidelinesAttribute()
+{
+    return $this->configuration;
+}
 }

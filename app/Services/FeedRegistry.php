@@ -13,7 +13,7 @@ class FeedRegistry
      */
     public function getFeedConfig(string $feedName): ?FeedConfig
     {
-        return Cache::remember("feed_config_{$feedName}", 3600, function () use ($feedName) {
+        return Cache::remember("feed_config_1{$feedName}", 0, function () use ($feedName) {
             return FeedConfig::where('name', $feedName)->first();
         });
     }

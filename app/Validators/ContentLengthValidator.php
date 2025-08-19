@@ -5,6 +5,7 @@ namespace App\Validators;
 
 use App\Models\Article;
 use App\Models\FeedConfig;
+use Illuminate\Support\Facades\Log;
 
 class ContentLengthValidator extends BaseValidator
 {
@@ -35,6 +36,10 @@ class ContentLengthValidator extends BaseValidator
         if ($charCount > $maxChars) {
             $issues[] = "Character count ({$charCount}) exceeds maximum ({$maxChars})";
         }
+
+        Log::error('ValidatingIsuues', [
+            'issues' => $issues
+        ]);
 
         if (!empty($issues)) {
             return $this->fail(
