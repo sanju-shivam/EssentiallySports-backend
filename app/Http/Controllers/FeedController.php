@@ -7,6 +7,7 @@ use App\Models\FeedConfig;
 use App\Services\FeedRegistry;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 
 class FeedController extends Controller
 {
@@ -60,12 +61,20 @@ class FeedController extends Controller
             'is_active' => 'sometimes|boolean',
             'api_endpoint' => 'sometimes|nullable|url',
             'api_credentials' => 'sometimes|nullable|array',
+            'name' => 'sometimes|string',
+            'id'    => 'integer',
         ]);
 
-        $this->feedRegistry->updateFeed($feedConfig->name, $validated);
-        $feedConfig->refresh();
+        Log::error('udpate data', [
+            'feed_name' => $feedConfig->name,
+            'data' => $validated,
+        ]);
+        $this->feedRegistry->updateFeed($validated['name'], $validated);
 
-        return response()->json($feedConfig);
+        $feedConfig->refresh();
+        $feed = FeedConfig::where('id', $validated['id'])->with('publishAttempts')->first();
+
+        return response()->json($feed);
     }
 
     public function getStats(FeedConfig $feedConfig): JsonResponse
